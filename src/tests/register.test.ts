@@ -17,15 +17,29 @@ test("Register user", async () => {
 
   const mutation = `
         mutation {
-            register(email:"${email}", password:"${password}")
+            register(email:"${email}", password:"${password}") {
+              path
+              message
+            }
         }
     `;
 
   const result = await request(getHost(), mutation);
-  expect(result).toEqual({ register: true });
+  expect(result).toEqual({ register: null });
   const users = await User.find({ where: { email } });
 
   expect(users).toHaveLength(1);
   expect(users[0].email).toEqual(email);
   expect(users[0].password).not.toBe(password);
+
+  // Register again
+  const result2 = await request(getHost(), mutation);
+  expect(result2).toEqual({
+    register: [
+      {
+        path: "email",
+        message: "already taken",
+      },
+    ],
+  });
 });
