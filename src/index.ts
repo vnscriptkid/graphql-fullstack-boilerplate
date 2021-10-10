@@ -6,13 +6,21 @@ import { importSchema } from "graphql-import";
 import { resolvers } from "./resolvers";
 import { createConnection } from "typeorm";
 import * as path from "path";
-const typeDefs = importSchema(path.join(__dirname, "schema.graphql"));
 
-const server = new GraphQLServer({ typeDefs, resolvers });
+export const startServer = async () => {
+  const typeDefs = importSchema(path.join(__dirname, "schema.graphql"));
 
-createConnection().then(async () => {
-  server.start(() => console.log("Server is running on localhost:4000"));
-});
+  const server = new GraphQLServer({ typeDefs, resolvers });
+
+  await createConnection();
+
+  await server.start();
+
+  console.log("Server is running on localhost:4000");
+};
+
+startServer();
+
 //     console.log("Inserting a new user into the database...");
 //     const user = new User();
 //     user.firstName = "Timber";
