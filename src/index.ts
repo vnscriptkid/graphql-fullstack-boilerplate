@@ -4,16 +4,15 @@ import { GraphQLServer } from "graphql-yoga";
 import { importSchema } from "graphql-import";
 
 import { resolvers } from "./resolvers";
-const typeDefs = importSchema("schema.graphql");
+import { createConnection } from "typeorm";
+import * as path from "path";
+const typeDefs = importSchema(path.join(__dirname, "schema.graphql"));
 
 const server = new GraphQLServer({ typeDefs, resolvers });
-server.start(() => console.log("Server is running on localhost:4000"));
 
-// import { createConnection } from "typeorm";
-// import { User } from "./entity/User";
-
-// createConnection()
-//   .then(async (connection) => {
+createConnection().then(async () => {
+  server.start(() => console.log("Server is running on localhost:4000"));
+});
 //     console.log("Inserting a new user into the database...");
 //     const user = new User();
 //     user.firstName = "Timber";
