@@ -1,11 +1,15 @@
-import { createTypeormConn } from "./../utils/createTypeormConn";
+import { startServer } from "./../startServer";
 import { User } from "./../entity/User";
-import { host } from "./constants";
 import { request } from "graphql-request";
 
 jest.setTimeout(10000);
 
-beforeAll(() => createTypeormConn());
+let getHost = () => "";
+
+beforeAll(async () => {
+  const app = await startServer();
+  getHost = () => `http://localhost:${app.address().port}`;
+});
 
 test("Register user", async () => {
   const email = "fake2@gmail.com";
@@ -17,7 +21,7 @@ test("Register user", async () => {
         }
     `;
 
-  const result = await request(host, mutation);
+  const result = await request(getHost(), mutation);
   expect(result).toEqual({ register: true });
   const users = await User.find({ where: { email } });
 
