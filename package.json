@@ -8,6 +8,7 @@
       "@types/jest": "27.0.2",
       "@types/node": "^8.0.29",
       "@types/uuid": "8.3.1",
+      "@types/yup": "0.29.13",
       "cross-env": "7.0.3",
       "gql2ts": "1.10.1",
       "graphql-request": "3.5.0",
@@ -28,11 +29,12 @@
       "pg": "^8.4.0",
       "reflect-metadata": "^0.1.10",
       "typeorm": "0.2.38",
-      "uuid": "8.3.2"
+      "uuid": "8.3.2",
+      "yup": "0.32.9"
    },
    "scripts": {
       "start": "cross-env NODE_ENV=development nodemon --exec ts-node src/index.ts",
       "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts",
-      "test": "jest --forceExit"
+      "test": "jest --forceExit --watchAll"
    }
 }
